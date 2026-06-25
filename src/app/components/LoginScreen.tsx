@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, Shield, Wind } from 'lucide-react';
+import { API_BASE_URL, updateApiUrls } from '../lib/api';
 
 type LoginScreenProps = {
   loading: boolean;
@@ -11,6 +12,12 @@ export function LoginScreen({ loading, error, onLogin }: LoginScreenProps) {
   const [email, setEmail] = useState('admin@windmill.local');
   const [password, setPassword] = useState('admin123');
   const [rememberMe, setRememberMe] = useState(true);
+  const [apiUrl, setApiUrl] = useState(API_BASE_URL);
+
+  const handleApiUrlChange = (val: string) => {
+    setApiUrl(val);
+    updateApiUrls(val);
+  };
 
   return (
     <div className="min-h-full relative overflow-hidden bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_34%),linear-gradient(180deg,#020617_0%,#050816_50%,#020617_100%)] text-white flex items-center justify-center px-6 py-10">
@@ -109,6 +116,30 @@ export function LoginScreen({ loading, error, onLogin }: LoginScreenProps) {
                 <div className="text-cyan-300">User</div>
                 <div>user@windmill.local / user123</div>
               </div>
+            </div>
+
+            <div className="border-t border-white/10 pt-4">
+              <details className="group">
+                <summary className="list-none flex items-center justify-between text-xs text-slate-400 cursor-pointer select-none">
+                  <span>API Connection Settings</span>
+                  <span className="text-cyan-300 group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <div className="mt-3 space-y-2">
+                  <label className="block space-y-1">
+                    <span className="text-[10px] text-slate-400">API Gateway URL</span>
+                    <input
+                      value={apiUrl}
+                      onChange={event => handleApiUrlChange(event.target.value)}
+                      type="text"
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
+                      placeholder="http://127.0.0.1:8000"
+                    />
+                  </label>
+                  <p className="text-[10px] text-slate-400 leading-normal">
+                    When running on GitHub Pages (HTTPS), you must use a secure tunnel (e.g., ngrok) or an HTTPS server to avoid Mixed Content errors.
+                  </p>
+                </div>
+              </details>
             </div>
           </form>
         </div>

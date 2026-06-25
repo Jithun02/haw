@@ -1,5 +1,13 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000';
-const API_WS_URL = import.meta.env.VITE_API_WS_URL ?? API_BASE_URL.replace(/^http/, 'ws');
+export let API_BASE_URL = localStorage.getItem('windmill_api_base_url') || (import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000');
+export let API_WS_URL = localStorage.getItem('windmill_api_ws_url') || (import.meta.env.VITE_API_WS_URL ?? API_BASE_URL.replace(/^http/, 'ws'));
+
+export function updateApiUrls(baseUrl: string) {
+  localStorage.setItem('windmill_api_base_url', baseUrl);
+  const wsUrl = baseUrl.replace(/^http/, 'ws');
+  localStorage.setItem('windmill_api_ws_url', wsUrl);
+  API_BASE_URL = baseUrl;
+  API_WS_URL = wsUrl;
+}
 
 export type UserInfo = {
   id: number;
@@ -168,4 +176,4 @@ export async function downloadExport(format: 'csv' | 'excel' | 'pdf') {
   URL.revokeObjectURL(url);
 }
 
-export { API_BASE_URL, API_WS_URL, STORAGE_KEY };
+export { STORAGE_KEY };
